@@ -4,9 +4,10 @@
   "description": "Unipresse API's client rework",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_ENV=production node server.js",
+    "dev": "node server.js",
     "test": "NODE_ENV=test mocha -R 'dot' --recursive --compilers js:babel-core/register -r mock-local-storage",
-    "build": "NODE_ENV=production webpack --config webpack.config.prod.js -p --progress",
+    "postinstall": "NODE_ENV=production webpack --config webpack.config.prod.js -p --progress",
     "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "repository": {
