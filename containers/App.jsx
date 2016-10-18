@@ -1,42 +1,28 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import PizzaList from '../components/PizzaList.jsx';
+import OrderList from '../components/OrderList.jsx';
 
 import {
   fetchListPizzas,
+  orderPizza,
+  fetchOrderList,
+  fetchSingleOrder,
 } from '../actions/pizzas';
 
 class App extends Component {
-  onClickDiv(e) {
-    console.log('Hello World !!');
-  }
-
   componentWillMount() {
-    const { listPizzas } = this.props;
+    const { listPizzas, listOrders } = this.props;
     listPizzas();
-  }
-
-  formatPrice(price) {
-    return price / 100;
-  }
-
-  renderPizzaList() {
-    const { pizza } = this.props;
-    return pizza.result.map(
-      (key) => {
-        const current = pizza.entities[key];
-        return (
-          <li key={key}>
-            {current.name} - {this.formatPrice(current.price)} €
-          </li>
-      )
-      }
-    )
+    listOrders();
   }
 
   render() {
+    const { pizza, order, orderSelectedPizza} = this.props;
     return (
-      <div onClick={this.onClickDiv}>
-        {this.renderPizzaList()}
+      <div>
+        <PizzaList pizza={pizza} order={orderSelectedPizza} />
+        <OrderList orders={order} />
       </div>
     );
   }
@@ -45,13 +31,18 @@ class App extends Component {
 function mapStateToProps(state) {
   const {
     pizza,
+    order,
   } = state;
 
   return {
     pizza: pizza.toJS(),
+    order: order.toJS(),
   };
 }
 
 export default connect(mapStateToProps, {
   listPizzas: fetchListPizzas,
+  getOrder: fetchSingleOrder,
+  listOrders: fetchOrderList,
+  orderSelectedPizza: orderPizza,
 })(App);

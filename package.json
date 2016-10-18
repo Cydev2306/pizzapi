@@ -27,7 +27,6 @@
   "dependencies": {
     "babel-polyfill": "^6.9.1",
     "form-urlencoded": "^1.4.1",
-    "grommet": "https://github.com/grommet/grommet/tarball/stable",
     "humps": "^1.1.0",
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
