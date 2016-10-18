@@ -10,15 +10,13 @@ const { API_URL } = apiConstants;
 const API_ROOT = `${API_URL}`;
 
 
-function callApi(endpoint, method, schema, body = {}) {
-
+function callApi(endpoint, method, schema, body = {}, url = API_ROOT) {
   const fullUrl = `${API_ROOT}/${endpoint}`;
-  // const jwtToken = (typeof localStorage !== 'undefined')?localStorage.getItem('jwt-token'):'';
 
   const headers = {
-    Accept: 'application/json, text/plain',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'luc.cyril',
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `luc.cyril`,
   };
 
   const fetchParameters = {
@@ -26,30 +24,38 @@ function callApi(endpoint, method, schema, body = {}) {
     headers,
   };
 
+  if (method === 'post') {
+    fetchParameters.body = JSON.stringify(body);
+  }
+
   return fetch(fullUrl, fetchParameters)
-      .then(response =>
-          response.json().then(json => ({ json, response }))
-      ).then(({ json, response }) => {
-        if (!response.ok) {
-          return Promise.reject(json);
-        }
+    .then(response =>
+      response.json().then(json => ({ json, response }))
+    ).then(({ json, response }) => {
+      if (!response.ok) {
+        return Promise.reject(json);
+      }
+
+      if (!_.isEmpty(schema)) {
         const camelizedJson = camelizeKeys(json);
-        if (!_.isEmpty(schema)) {
-          return Object.assign({},
-            normalize(camelizedJson, schema)
-          );
-        }
-        return camelizedJson;
-      });
+        return Object.assign({},
+          normalize(camelizedJson, schema)
+        );
+      }
+      return json;
+    });
 }
 
 //MODIFY HERE
 // example : const b2bClientSchema = new Schema('b2bClient');
 const pizzaSchema = new Schema('pizza');
+const orderSchema = new Schema('order');
 
 export const Schemas = {
   PIZZA: pizzaSchema,
   PIZZA_ARRAY: arrayOf(pizzaSchema),
+  ORDER: orderSchema,
+  ORDER_ARRAY: arrayOf(orderSchema)
 };
 
 // Curryfied middleware function for readability
