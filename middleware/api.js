@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { camelizeKeys } from 'humps';
 import urlencoded from 'form-urlencoded';
 const { API_URL } = apiConstants;
-const API_ROOT = `${API_URL}/v1`;
+const API_ROOT = `${API_URL}`;
 
 
 function callApi(endpoint, method, schema, body = {}) {
@@ -36,7 +36,7 @@ function callApi(endpoint, method, schema, body = {}) {
         const camelizedJson = camelizeKeys(json);
         if (!_.isEmpty(schema)) {
           return Object.assign({},
-            normalize(camelizedJson, { data: schema })
+            normalize(camelizedJson, schema)
           );
         }
         return camelizedJson;
@@ -45,8 +45,11 @@ function callApi(endpoint, method, schema, body = {}) {
 
 //MODIFY HERE
 // example : const b2bClientSchema = new Schema('b2bClient');
+const pizzaSchema = new Schema('pizza');
+
 export const Schemas = {
-  // export example -> B2B_CLIENT: b2bClientSchema
+  PIZZA: pizzaSchema,
+  PIZZA_ARRAY: arrayOf(pizzaSchema),
 };
 
 // Curryfied middleware function for readability
