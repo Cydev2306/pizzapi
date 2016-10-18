@@ -1,0 +1,13 @@
+{
+    "extends": [
+      "airbnb",
+      "plugin:flowtype/recommended"
+    ],
+    "env": {
+      "mocha": true
+    },
+    "plugins": [
+        "react",
+        "flowtype"
+    ]
+}
